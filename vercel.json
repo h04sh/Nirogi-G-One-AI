@@ -1,0 +1,16 @@
+{
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "artifacts/medagent/dist",
+  "framework": "vite",
+  "env": {
+    "VITE_API_URL": {
+      "description": "API URL from Railway deployment"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "${VITE_API_URL}/api/:path*"
+    }
+  ]
+}
