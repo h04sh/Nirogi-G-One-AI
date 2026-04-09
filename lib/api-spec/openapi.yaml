@@ -1,0 +1,476 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Nirogi G-One AI Healthcare API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: chat
+    description: AI Chatbot operations
+  - name: diagnosis
+    description: AI Diagnosis operations
+  - name: reports
+    description: Patient reports
+  - name: dashboard
+    description: Dashboard analytics
+  - name: auth
+    description: Authentication
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /chat:
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send message to AI chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+  /chat/history:
+    get:
+      operationId: getChatHistory
+      tags: [chat]
+      summary: Get chat history
+      parameters:
+        - name: session_id
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Chat history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatMessage"
+
+  /analyze-text:
+    post:
+      operationId: analyzeText
+      tags: [diagnosis]
+      summary: Analyze text symptoms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextAnalysisRequest"
+      responses:
+        "200":
+          description: Diagnosis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosisResult"
+
+  /analyze-image:
+    post:
+      operationId: analyzeImage
+      tags: [diagnosis]
+      summary: Analyze medical image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImageAnalysisRequest"
+      responses:
+        "200":
+          description: Image analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosisResult"
+
+  /analyze-voice:
+    post:
+      operationId: analyzeVoice
+      tags: [diagnosis]
+      summary: Analyze voice transcript
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoiceAnalysisRequest"
+      responses:
+        "200":
+          description: Voice analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosisResult"
+
+  /reports:
+    get:
+      operationId: getReports
+      tags: [reports]
+      summary: Get patient reports
+      responses:
+        "200":
+          description: Reports list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientReport"
+
+  /reports/{id}/pdf:
+    get:
+      operationId: downloadReportPdf
+      tags: [reports]
+      summary: Download report as PDF
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: PDF file
+
+  /save-case:
+    post:
+      operationId: saveCase
+      tags: [reports]
+      summary: Save a patient case
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveCaseRequest"
+      responses:
+        "200":
+          description: Saved case
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientReport"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get dashboard statistics
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /dashboard/activity:
+    get:
+      operationId: getDashboardActivity
+      tags: [dashboard]
+      summary: Get recent activity
+      responses:
+        "200":
+          description: Recent activity list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
+  /dashboard/risk-breakdown:
+    get:
+      operationId: getRiskBreakdown
+      tags: [dashboard]
+      summary: Get risk level breakdown
+      responses:
+        "200":
+          description: Risk breakdown data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RiskBreakdownItem"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+        session_id:
+          type: string
+        language:
+          type: string
+          enum: [en, hi]
+      required:
+        - message
+
+    ChatResponse:
+      type: object
+      properties:
+        reply:
+          type: string
+        triage_level:
+          type: string
+          nullable: true
+          enum: [routine, urgent, emergency]
+        confidence:
+          type: number
+          nullable: true
+        diagnosis:
+          type: string
+          nullable: true
+        reasoning:
+          type: string
+          nullable: true
+        next_steps:
+          type: string
+          nullable: true
+        session_id:
+          type: string
+      required:
+        - reply
+        - session_id
+
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        timestamp:
+          type: string
+        triage_level:
+          type: string
+      required:
+        - id
+        - role
+        - content
+        - timestamp
+
+    TextAnalysisRequest:
+      type: object
+      properties:
+        symptoms:
+          type: string
+        age:
+          type: number
+        gender:
+          type: string
+        language:
+          type: string
+          enum: [en, hi]
+      required:
+        - symptoms
+
+    ImageAnalysisRequest:
+      type: object
+      properties:
+        image_base64:
+          type: string
+        image_type:
+          type: string
+        additional_info:
+          type: string
+      required:
+        - image_base64
+
+    VoiceAnalysisRequest:
+      type: object
+      properties:
+        transcript:
+          type: string
+        language:
+          type: string
+          enum: [en, hi]
+      required:
+        - transcript
+
+    DiagnosisResult:
+      type: object
+      properties:
+        triage_level:
+          type: string
+          enum: [routine, urgent, emergency]
+        conditions:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+        explanation:
+          type: string
+        next_steps:
+          type: string
+        reasoning:
+          type: string
+      required:
+        - triage_level
+        - conditions
+        - confidence
+        - explanation
+
+    PatientReport:
+      type: object
+      properties:
+        id:
+          type: string
+        patient_name:
+          type: string
+        age:
+          type: number
+        gender:
+          type: string
+        symptoms:
+          type: string
+        diagnosis:
+          type: string
+        triage_level:
+          type: string
+          enum: [routine, urgent, emergency]
+        confidence:
+          type: number
+        created_at:
+          type: string
+        notes:
+          type: string
+      required:
+        - id
+        - patient_name
+        - symptoms
+        - diagnosis
+        - triage_level
+        - confidence
+        - created_at
+
+    SaveCaseRequest:
+      type: object
+      properties:
+        patient_name:
+          type: string
+        age:
+          type: number
+        gender:
+          type: string
+        symptoms:
+          type: string
+        diagnosis:
+          type: string
+        triage_level:
+          type: string
+        confidence:
+          type: number
+        notes:
+          type: string
+      required:
+        - patient_name
+        - symptoms
+        - diagnosis
+        - triage_level
+        - confidence
+
+    DashboardStats:
+      type: object
+      properties:
+        total_patients:
+          type: number
+        active_cases:
+          type: number
+        high_risk_alerts:
+          type: number
+        resolved_cases:
+          type: number
+        avg_confidence:
+          type: number
+        emergency_count:
+          type: number
+        urgent_count:
+          type: number
+        routine_count:
+          type: number
+      required:
+        - total_patients
+        - active_cases
+        - high_risk_alerts
+        - resolved_cases
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: string
+        patient_name:
+          type: string
+        action:
+          type: string
+        triage_level:
+          type: string
+        timestamp:
+          type: string
+        diagnosis:
+          type: string
+      required:
+        - id
+        - patient_name
+        - action
+        - triage_level
+        - timestamp
+
+    RiskBreakdownItem:
+      type: object
+      properties:
+        level:
+          type: string
+        count:
+          type: number
+        percentage:
+          type: number
+      required:
+        - level
+        - count
+        - percentage

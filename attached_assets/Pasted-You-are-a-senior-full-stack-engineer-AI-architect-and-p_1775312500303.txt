@@ -1,0 +1,385 @@
+You are a senior full-stack engineer, AI architect, and product designer. Build a complete, production-quality, multi-page AI Healthcare Agent web application called nirogi g-one AI.
+
+The system must be fully functional, modular, scalable, and visually polished. Do NOT skip any feature. Do NOT return partial implementations. Ensure all frontend, backend, AI, database, authentication, and integrations are connected and runnable.
+
+⸻
+
+CORE OBJECTIVE
+
+Build a realistic AI healthcare system including:
+	•	Conversational AI chatbot with multi-turn memory (Gemini-powered)
+	•	Diagnosis system (text + image + voice input)
+	•	Dashboard with analytics
+	•	Reports system with working PDF downloads
+	•	Authentication system (Login/Register)
+	•	User Profile management
+	•	Multilingual support (English ↔ Hindi toggle)
+	•	Persistent backend using Supabase (instead of mock data)
+	•	Clean, calm, medical-grade UI
+
+⸻
+
+STRICT DESIGN RULES
+	•	DO NOT use dark, blue, or purple colors
+	•	Use soft neutral palette: beige, off-white, soft green, light gray
+	•	UI must feel calm, minimal, medical
+	•	Card-based layout with rounded corners (xl)
+	•	Soft shadows, subtle borders
+	•	Clear typography hierarchy
+	•	Smooth hover + transition effects
+	•	Fully responsive design
+
+⸻
+
+TECH STACK (MANDATORY)
+
+Frontend:
+	•	React (Vite)
+	•	Tailwind CSS
+	•	Framer Motion
+
+Backend:
+	•	FastAPI (Python)
+
+AI Layer:
+	•	OpenCV
+	•	PyTorch
+	•	Transformers
+	•	LangChain (memory + agent)
+
+Database & Auth:
+	•	Supabase (PostgreSQL + Auth + Storage)
+
+External AI:
+	•	Google Gemini API (FREE API KEY)
+
+⸻
+
+SYSTEM ARCHITECTURE
+
+User Input (Text/Image/Voice/Chat)
+→ React Frontend
+→ FastAPI Backend
+→ AI Modules (NLP, Vision, Risk Engine)
+→ LangChain Agent (context memory)
+→ Gemini API (response generation)
+→ Supabase (patients, cases, reports, chat_logs, users)
+
+⸻
+
+NAVIGATION & LAYOUT STRUCTURE (IMPORTANT ADDITION)
+	•	Main pages must include:
+	•	Home
+	•	Diagnosis
+	•	Dashboard
+	•	Reports
+	•	About
+	•	Layout must include:
+	•	Header (top navigation)
+	•	Left-side profile icon (NOT right side)
+	•	PROFILE DROPDOWN (on left side):
+When clicking profile icon, open dropdown with:
+	•	View Profile
+	•	Account Settings
+	•	Language Preference (EN / HI toggle)
+	•	Logout
+	•	Ensure dropdown is:
+	•	Smooth animated (Framer Motion)
+	•	Accessible
+	•	Closes on outside click
+
+⸻
+
+PAGES & FEATURES
+	1.	HOME PAGE
+
+	•	Hero Section:
+	•	Title: “AI-Powered Healthcare Agent”
+	•	Subtitle explaining benefits
+	•	Centered layout
+	•	CTA Buttons:
+	•	“Start Diagnosis”
+	•	MUST be visually prominent
+	•	Soft green gradient
+	•	Hover scale + shadow animation
+	•	“Upload Case”
+	•	Feature Cards:
+	•	AI Diagnosis
+	•	Smart Chatbot
+	•	Real-time Reports
+	•	Voice Assistant
+	•	Framer Motion animations:
+	•	Fade-in sections
+	•	Staggered animations
+
+⸻
+
+	2.	AUTHENTICATION
+
+⸻
+
+LOGIN PAGE:
+	•	Email + Password form
+	•	Validation + error states
+	•	Loading indicator
+	•	Success redirect
+
+REGISTER PAGE:
+	•	Name, Email, Password
+	•	Validation + error handling
+	•	Supabase Auth integration
+
+⸻
+
+	3.	PROFILE PAGE
+
+⸻
+
+	•	User info:
+	•	Name
+	•	Email
+	•	Settings:
+	•	Language preference toggle
+	•	Account settings
+	•	Logout button
+	•	Connected to Supabase session
+
+⸻
+
+	4.	GLOBAL CHATBOT (CRITICAL)
+
+⸻
+
+	•	Floating button bottom-right
+	•	Expandable chat window
+	•	Scrollable history
+	•	User & AI message bubbles
+
+BEHAVIOR:
+	•	Typing animation
+	•	Streaming responses (progressive)
+	•	Multi-turn memory (LangChain)
+	•	Context-aware replies
+	•	Triage-aware reasoning
+
+INTEGRATION:
+	•	POST /chat
+	•	Gemini API integration
+	•	Memory stored in backend + Supabase
+
+RESPONSE FORMAT:
+{
+reply,
+triage_level,
+confidence,
+diagnosis,
+reasoning,
+next_steps
+}
+
+⸻
+
+	5.	DIAGNOSIS PAGE
+
+⸻
+
+INPUT:
+	•	Text symptoms input
+	•	Image upload (OpenCV simulation)
+	•	Voice assistant:
+	•	Mic button
+	•	Web Speech API
+	•	Live transcription
+
+OUTPUT:
+	•	Triage Level (Routine / Urgent / Emergency)
+	•	Conditions list
+	•	Confidence %
+	•	Explanation
+	•	Loading animation
+
+APIs:
+	•	POST /analyze-text
+	•	POST /analyze-image
+	•	POST /analyze-voice
+
+⸻
+
+	6.	DASHBOARD PAGE
+
+⸻
+
+	•	Stats Cards:
+	•	Total Patients
+	•	Active Cases
+	•	High Risk Alerts
+	•	Recent Activity Table
+	•	Data from Supabase
+
+⸻
+
+	7.	REPORTS PAGE (FIX REQUIRED)
+
+⸻
+
+	•	Patient summary cards
+	•	Show:
+	•	Name
+	•	Symptoms
+	•	Diagnosis
+	•	Triage History
+
+FIXES:
+	•	Remove empty spaces
+	•	Dynamic card heights
+	•	Responsive grid layout
+	•	Emergency section MUST show actual data
+
+FEATURE:
+	•	Download Report button (WORKING)
+	•	Generate PDF using FastAPI (reportlab)
+	•	Return file for download
+
+API:
+	•	GET /reports
+
+⸻
+
+	8.	ABOUT PAGE
+
+⸻
+
+	•	What is nirogi g-one AI
+	•	Purpose
+	•	Benefits
+	•	How AI helps users
+	•	Clean section-based layout
+
+⸻
+
+GLOBAL COMPONENTS
+
+HEADER:
+	•	Logo + app icon
+	•	Navigation:
+	•	Home
+	•	Diagnosis
+	•	Dashboard
+	•	Reports
+	•	About
+	•	LEFT SIDE: Profile icon with dropdown
+	•	Language switcher integrated
+
+FOOTER:
+	•	Minimal design
+	•	About + Contact
+	•	Smooth hover effects
+	•	No tech stack mention
+
+⸻
+
+INTERNATIONALIZATION
+	•	Implement full i18n system
+	•	JSON files:
+	•	en.json
+	•	hi.json
+	•	Dynamic switching across entire UI
+	•	No hardcoded text
+
+⸻
+
+ANIMATIONS (FRAMER MOTION)
+	•	Page transitions
+	•	Section reveal animations
+	•	Chatbot open/close
+	•	Dropdown animations
+	•	Typing animation
+
+⸻
+
+BACKEND (FASTAPI)
+
+Endpoints:
+
+POST /chat
+POST /analyze-text
+POST /analyze-image
+POST /analyze-voice
+POST /save-case
+GET /reports
+
+⸻
+
+AI LOGIC
+	•	Rule-based symptom analysis
+	•	Risk scoring system
+	•	LangChain context memory
+	•	Gemini generates responses
+	•	Add artificial delay for realism
+
+⸻
+
+SUPABASE DATABASE STRUCTURE
+
+Tables:
+	•	users
+	•	patients
+	•	cases
+	•	reports
+	•	chat_logs
+
+⸻
+
+PROJECT STRUCTURE
+
+frontend/
+src/
+components/
+pages/
+services/
+i18n/
+hooks/
+
+backend/
+main.py
+routes/
+services/
+utils/
+ai/
+
+⸻
+
+CRITICAL FIXES
+	•	Fix dull CTA button → make visually strong
+	•	Fix empty spaces in reports
+	•	Fix navigation routing issues
+	•	Ensure chatbot works globally
+	•	Ensure API integration works
+	•	Ensure Supabase persistence is active
+
+⸻
+
+OUTPUT REQUIREMENTS
+
+Return COMPLETE, runnable code for:
+	•	React frontend
+	•	FastAPI backend
+	•	Gemini API integration
+	•	Supabase integration
+	•	Authentication system
+	•	Chatbot with memory + streaming
+	•	Voice assistant
+	•	PDF generation
+	•	i18n system
+	•	Full UI + animations
+
+⸻
+
+FINAL RULE
+
+Do NOT skip anything.
+Do NOT return partial code.
+Ensure full working system.
+
+
+Diagnosis, Dashboard ,Sign Up / Login Screen,home,report,about page i want all these page there is 6 page so make all this page 
